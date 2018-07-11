@@ -3,6 +3,7 @@ package com.codepath.acfoley.insta.model;
 import com.parse.ParseClassName;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("Post")
@@ -40,4 +41,23 @@ public class Post extends ParseObject {
     public void setUser(String user) {
         put(KEY_USER, user);
     }
+
+    public static class Query extends ParseQuery<Post> {
+        public Query() {
+            super(Post.class);
+        }
+
+        public Query getTop() { //get top posts
+            setLimit(20); //gets top 20 posts
+            return this;
+        }
+
+        public Query withUser() {
+            include("user"); //this is how we queried a post with a user on Parse Dashboard
+            return this;
+        }
+    }
+
+
+
 }

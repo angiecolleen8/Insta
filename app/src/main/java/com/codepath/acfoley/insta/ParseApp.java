@@ -2,7 +2,9 @@ package com.codepath.acfoley.insta;
 
 import android.app.Application;
 
+import com.codepath.acfoley.insta.model.Post;
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -12,6 +14,10 @@ public class ParseApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ParseObject.registerSubclass(Post.class); //Parse needs this line to know that we are creating a custom Parse object.
+            // Tells Parse that this Post model is a custom Parse model that we created to encapsulate our data when dealing with Parse classes
+
 
         // Use for troubleshooting -- remove this line for production
         Parse.setLogLevel(Parse.LOG_LEVEL_DEBUG);
