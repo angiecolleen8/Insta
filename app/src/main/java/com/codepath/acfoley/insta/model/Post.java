@@ -30,7 +30,7 @@ public class Post extends ParseObject {
         return getParseFile(KEY_IMAGE);
     }
 
-    public void putImage(ParseFile image) {
+    public void setImage(ParseFile image) {
         put(KEY_IMAGE, image);
     }
 
@@ -38,7 +38,7 @@ public class Post extends ParseObject {
         return getParseUser(KEY_USER);
     }
 
-    public void setUser(String user) {
+    public void setUser(ParseUser user) { //TODO - double check this param. I originally had it as String user, but ParseUser makes more sense I think
         put(KEY_USER, user);
     }
 
@@ -57,7 +57,4 @@ public class Post extends ParseObject {
             return this;
         }
     }
-
-
-
 }
