@@ -8,6 +8,8 @@ import com.parse.ParseUser;
 @ParseClassName("Post")
 public class Post extends ParseObject {
 
+    //TODO - start at 10:55 in video 4 - Defining and Querying Parse Objects
+
     //encapsulate post object
         //String var names correspond to the column names on ParseDashboard
     private static final String KEY_DESCRIPTION = "description";
