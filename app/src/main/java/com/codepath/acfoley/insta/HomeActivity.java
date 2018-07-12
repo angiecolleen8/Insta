@@ -2,8 +2,12 @@ package com.codepath.acfoley.insta;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -19,7 +23,12 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+
+import static com.codepath.acfoley.insta.Constants.REQUEST_CODE_CAMERA;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -45,6 +54,7 @@ public class HomeActivity extends AppCompatActivity {
     private Button btn_create;
     private Button btn_refresh;
     private ImageView iv_newTempPic;
+    String mCurrentPhotoPath;
 
 
     @Override
@@ -67,27 +77,10 @@ public class HomeActivity extends AppCompatActivity {
                 //first - we force user to take a picture
                 dispatchTakePictureIntent();
 
-
-                final String descriptionInput = et_description.getText().toString();
-                final ParseUser user = ParseUser.getCurrentUser();
-
-
-                final File file = new File(imagepath); //I think I will end up changing this
-                //ask user to take photo using camera
-                //launch camera
-                //intent to go from this activity to camera
-                //Override startActivityForResult (needs intent and request code to go to/from camera)
-                //Override onActivityResult using requestcode for camera? or requestcode for compose activity
-
-                //intent.putExtras equivalent method for parse?
-
-                //grab photo
-                final ParseFile parseFile = new ParseFile(file);
-                createPost(descriptionInput, parseFile, user); //defined just above
-
+//
+//
             }
         });
-
 
         btn_refresh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,20 +94,68 @@ public class HomeActivity extends AppCompatActivity {
      * take user to camera
      */
     //resolveActivity() checks that there is an activity that can handle this intent
-    private void dispatchTakePictureIntent() {
+    /*private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, Constants.REQUEST_CODE_CAMERA);
         }
+    }*/
+
+    /**take user to camera - invoke intent*/
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+                Log.e("HomeActivity", "error related to dispatchTakePictureIntent");
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.codepath.acfoley.insta",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, Constants.REQUEST_CODE_CAMERA);
+            }
+        }
     }
 
-    /**takes user back to home activity*/
+    /**takes user back to home activity and makes post*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
             iv_newTempPic.setImageBitmap(imageBitmap);
+
+//            final String descriptionInput = et_description.getText().toString();
+//                final ParseUser user = ParseUser.getCurrentUser();
+//
+//
+//                //final File file = new File(imagepath); //I think I will end up changing this
+//                final File file;
+//                try {
+//                    file = createImageFile();
+//                    //grab photo
+//                    final ParseFile parseFile = new ParseFile(file);
+//                    createPost(descriptionInput, parseFile, user); //defined just above
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+
+//            ask user to take photo using camera
+//            launch camera
+//            intent to go from this activity to camera
+//            Override startActivityForResult (needs intent and request code to go to/from camera)
+//            Override onActivityResult using requestcode for camera? or requestcode for compose activity
+
+            //intent.putExtras //equivalent method for parse?
         }
     }
 
@@ -168,7 +209,23 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    /**creates unique filepath for photo*/
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }
 
