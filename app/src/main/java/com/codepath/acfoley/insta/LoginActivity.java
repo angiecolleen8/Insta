@@ -19,6 +19,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameInput;
     private EditText passwordInput;
     private Button btnLogin;
+    private Boolean setPass = true; //TODO - delete
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,12 @@ public class LoginActivity extends AppCompatActivity {
         usernameInput = (EditText) findViewById(R.id.et_username);
         passwordInput = (EditText) findViewById(R.id.et_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
+
+        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO - take out if block!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (hacky login)
+        if (setPass) {
+            usernameInput.setText("asdf");
+            passwordInput.setText("1234");
+        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,8 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(String username, String password) {
-        ParseUser.logInInBackground(username, password, new LogInCallback() {
-
+        ParseUser.logInInBackground(username, password, new LogInCallback() { //if this wasn't async, app would freeze
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
