@@ -26,15 +26,6 @@
         tools:layout_editor_absoluteX="279dp"
         tools:layout_editor_absoluteY="446dp" />
 
-    <ImageView
-        android:id="@+id/iv_newTempPic"
-        android:layout_width="330dp"
-        android:layout_height="318dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp"
-        app:srcCompat="@drawable/ic_launcher_background" />
-
     <TextView
         android:id="@+id/tv_timeline"
         android:layout_width="140dp"

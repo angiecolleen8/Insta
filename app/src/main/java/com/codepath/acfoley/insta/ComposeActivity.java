@@ -27,16 +27,16 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.codepath.acfoley.insta.Constants.REQUEST_CODE_COMPOSE;
-
 public class ComposeActivity extends AppCompatActivity {
 
-    ImageView iv_new_pic;
-    TextView tv_compose;
-    EditText et_description;
-    Button btn_post;
-    Button btn_new_pic;
-    String mCurrentPhotoPath;
+    private ImageView iv_new_pic;
+    private TextView tv_compose;
+    private EditText et_description;
+    private Button btn_post;
+    private Button btn_new_pic;
+    private String mCurrentPhotoPath;
+
+    //TODO - START HERE - create parse file and other stuff from video, and make var private
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +52,7 @@ public class ComposeActivity extends AppCompatActivity {
         btn_new_pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //button composes a post
-                //createPost();
-
-                //take you back to timeline with new post at top
+                //take you to camera
                 dispatchTakePictureIntent();
             }
         });
@@ -64,10 +61,16 @@ public class ComposeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //button composes a post
-                //createPost();
+                String description = et_description.getText().toString();
+                ParseUser user = new ParseUser();
+                final File file = new File(mCurrentPhotoPath);
+                final ParseFile parseFile = new ParseFile(file);
+                createPost(description, parseFile, user);
 
                 //take you back to timeline with new post at top
-               dispatchIntentForHome();
+                Intent data = new Intent (ComposeActivity.this, HomeActivity.class);
+                setResult(Constants.REQUEST_CODE_TIMELINE, data);  //had dispatchIntentforHome(Constants.REQUEST_CODE_COMPOSE, RESULT_OK, data)
+                startActivityForResult(data, Constants.REQUEST_CODE_TIMELINE);
             }
         });
     }
@@ -97,30 +100,45 @@ public class ComposeActivity extends AppCompatActivity {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODE_CAMERA);
             }
-        } //this if block worked to display image on compose activity
+        } //display image on compose activity
     }
 
-    /**after taking picture with camera, should take user to ComposeActivity*/
+    /**
+     * after taking picture with camera, should take user to ComposeActivity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_COMPOSE && resultCode == RESULT_OK) {
-            //launch ComposeActivity - which is where the new picture will be displayed
+        if (requestCode == Constants.REQUEST_CODE_CAMERA && resultCode == RESULT_OK) { //WAS REQUEST CODE COMPOSE
             Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath); //this line
             iv_new_pic.setImageBitmap(imageBitmap); //and this line let me see image on home screen
-
-            Intent i = new Intent(this, HomeActivity.class); //"I intend to go from this activity (COMPOSE activity) to HOMEActivity
-            setResult(Constants.REQUEST_CODE_TIMELINE, i);
-            startActivityForResult(i, Constants.REQUEST_CODE_TIMELINE);
         }
     }
 
-    //trying to go from Compose back to home
-    public void dispatchIntentForHome() {
-        Intent i = new Intent(this, HomeActivity.class);
-        setResult(Constants.REQUEST_CODE_TIMELINE, i);
-        startActivityForResult(i, Constants.REQUEST_CODE_TIMELINE);
-    }
+    /**
+     * go from Compose back to home
+     */
+   /* public void dispatchIntentForHome(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_COMPOSE && resultCode == RESULT_OK) {
 
+            Intent i = new Intent(this, HomeActivity.class);
+            setResult(Constants.REQUEST_CODE_TIMELINE, i);
+            startActivityForResult(i, Constants.REQUEST_CODE_TIMELINE);
+        }
+    }*/
+
+    //or, do I need a second onActivityResult for going from Compose (after picture taken) to timeline
+   /* @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODE_COMPOSE && resultCode == RESULT_OK) {
+            Intent i = new Intent(this, HomeActivity.class);
+            setResult(Constants.REQUEST_CODE_TIMELINE, i);
+            startActivityForResult(i, Constants.REQUEST_CODE_TIMELINE);
+        }
+    }*/
+
+    /**
+     * makes new post
+     */
     private void createPost(String description, ParseFile image, ParseUser user) {
         final Post newPost = new Post();
         newPost.setDescription(description);
@@ -130,7 +148,7 @@ public class ComposeActivity extends AppCompatActivity {
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("HomeActivity", "Post created successfully!");
+                    Log.d("ComposeActivity", "Post created successfully!");
                 } else {
                     e.printStackTrace();
                 }
@@ -141,7 +159,6 @@ public class ComposeActivity extends AppCompatActivity {
     /**
      * creates unique filepath for photo
      */
-    //TODO - move all picture logic to ComposeActivity
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

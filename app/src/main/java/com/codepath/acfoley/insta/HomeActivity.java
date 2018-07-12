@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.acfoley.insta.model.Post;
@@ -19,29 +18,9 @@ import static com.codepath.acfoley.insta.Constants.REQUEST_CODE_CAMERA;
 
 public class HomeActivity extends AppCompatActivity {
 
-    /*Flow:
-     * Login/signup
-     * Timeline Activity
-     * hit create button--> camera
-     * Take Picture in camera--> Compose Activity
-     * Hit Post button in Compose Activity-->
-     * Back to Timeline*/
-
-    //ask user to take photo using camera
-    //launch camera
-    //intent to go from this activity to camera
-    //Override startActivityForResult (needs intent and request code to go to/from camera)
-    //Override onActivityResult using requestcode for camera? or requestcode for compose activity
-    //onActivityResult should take us to Compose Actvity
-    //Post button in Compose Activity takes us back to
-
-
-    private static final String imagepath = "somestring"; //TODO- you will end up changing this
     private TextView tv_timeline;
     private Button btn_create;
     private Button btn_refresh;
-    private ImageView iv_newTempPic;
-    String mCurrentPhotoPath;
 
 
     @Override
@@ -52,8 +31,6 @@ public class HomeActivity extends AppCompatActivity {
         tv_timeline = (TextView) findViewById(R.id.tv_timeline);
         btn_create = (Button) findViewById(R.id.btn_create);
         btn_refresh = (Button) findViewById(R.id.btn_refresh);
-        //TODO - once camera works, remove this image view and move this picture to the imageView in the OnCompose activity
-        iv_newTempPic = (ImageView) findViewById(R.id.iv_newTempPic);
 
         btn_create.setOnClickListener(new View.OnClickListener() {
 
@@ -75,9 +52,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-    /**
-     * takes user back to home activity and makes post
-     */
+    /*** takes user back to home activity and makes post*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {        //Changed request code from Camera to Compose
@@ -87,7 +62,7 @@ public class HomeActivity extends AppCompatActivity {
             startActivityForResult(i, Constants.REQUEST_CODE_COMPOSE);
 
 
-            // Bundle extras = data.getExtras();
+            Bundle extras = data.getExtras();
 //            Bitmap imageBitmap = (Bitmap) extras.get("data");
 //            Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath); //this line
 //            iv_newTempPic.setImageBitmap(imageBitmap);                           //and this line allowed me to see camera on home activity before I rewired
@@ -95,26 +70,6 @@ public class HomeActivity extends AppCompatActivity {
 
 //            final String descriptionInput = et_description.getText().toString();
 //                final ParseUser user = ParseUser.getCurrentUser();
-//
-//
-//                //final File file = new File(imagepath); //I think I will end up changing this
-//                final File file;
-//                try {
-//                    file = createImageFile();
-//                    //grab photo
-//                    final ParseFile parseFile = new ParseFile(file);
-//                    createPost(descriptionInput, parseFile, user); //defined just above
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-
-//            ask user to take photo using camera
-//            launch camera
-//            intent to go from this activity to camera
-//            Override startActivityForResult (needs intent and request code to go to/from camera)
-//            Override onActivityResult using requestcode for camera? or requestcode for compose activity
-
-            //intent.putExtras //equivalent method for parse?
         }
     }
 
@@ -141,23 +96,5 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
-
-   /* private void createPost(String description, ParseFile image, ParseUser user) {
-        final Post newPost = new Post();
-        newPost.setDescription(description);
-        newPost.setUser(user);
-        newPost.setImage(image);
-        newPost.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if (e == null) {
-                    Log.d("HomeActivity", "Post created successfully!");
-                } else {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }*/
-
 }
 
