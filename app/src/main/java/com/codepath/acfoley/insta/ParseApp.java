@@ -37,10 +37,9 @@ public class ParseApp extends Application {
                 .build();
         Parse.initialize(configuration);
 
-        /*//test creation of object
+        //test creation of object --WORKS
         ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
+        testObject.put("foo", "NEW TEST OBJECT");
         testObject.saveInBackground();
-        */
     }
 }

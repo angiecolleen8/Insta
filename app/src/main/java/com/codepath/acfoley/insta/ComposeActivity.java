@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.codepath.acfoley.insta.model.Post;
 import com.parse.ParseException;
@@ -62,13 +63,13 @@ public class ComposeActivity extends AppCompatActivity {
             public void onClick(View view) {
                 //button composes a post
                 String description = et_description.getText().toString();
-                ParseUser user = new ParseUser();
+                final ParseUser user = ParseUser.getCurrentUser();
                 final File file = new File(mCurrentPhotoPath);
                 final ParseFile parseFile = new ParseFile(file);
                 createPost(description, parseFile, user);
 
                 //take you back to timeline with new post at top
-                Intent data = new Intent (ComposeActivity.this, HomeActivity.class);
+                Intent data = new Intent(ComposeActivity.this, HomeActivity.class);
                 setResult(Constants.REQUEST_CODE_TIMELINE, data);  //had dispatchIntentforHome(Constants.REQUEST_CODE_COMPOSE, RESULT_OK, data)
                 startActivityForResult(data, Constants.REQUEST_CODE_TIMELINE);
             }
@@ -115,32 +116,11 @@ public class ComposeActivity extends AppCompatActivity {
     }
 
     /**
-     * go from Compose back to home
-     */
-   /* public void dispatchIntentForHome(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_COMPOSE && resultCode == RESULT_OK) {
-
-            Intent i = new Intent(this, HomeActivity.class);
-            setResult(Constants.REQUEST_CODE_TIMELINE, i);
-            startActivityForResult(i, Constants.REQUEST_CODE_TIMELINE);
-        }
-    }*/
-
-    //or, do I need a second onActivityResult for going from Compose (after picture taken) to timeline
-   /* @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODE_COMPOSE && resultCode == RESULT_OK) {
-            Intent i = new Intent(this, HomeActivity.class);
-            setResult(Constants.REQUEST_CODE_TIMELINE, i);
-            startActivityForResult(i, Constants.REQUEST_CODE_TIMELINE);
-        }
-    }*/
-
-    /**
      * makes new post
      */
     private void createPost(String description, ParseFile image, ParseUser user) {
         final Post newPost = new Post();
+        //user.signUp(); //Debugger was giving me "must call signUp on ParseUser
         newPost.setDescription(description);
         newPost.setUser(user);
         newPost.setImage(image);
@@ -149,6 +129,7 @@ public class ComposeActivity extends AppCompatActivity {
             public void done(ParseException e) {
                 if (e == null) {
                     Log.d("ComposeActivity", "Post created successfully!");
+                    Toast.makeText(getApplicationContext(), "Post created successfully!", Toast.LENGTH_LONG).show();
                 } else {
                     e.printStackTrace();
                 }
