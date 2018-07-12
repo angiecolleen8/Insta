@@ -3,10 +3,10 @@ package com.codepath.acfoley.insta;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.codepath.acfoley.insta.model.Post;
 import com.parse.FindCallback;
@@ -23,7 +23,7 @@ public class HomeActivity extends AppCompatActivity {
     //"inflate" post item with Parse /  adapter
     //inflate recycler view with post items
 
-    private TextView tv_timeline;
+    private RecyclerView rv_timeline;
     private Button btn_create;
     private Button btn_refresh;
 
@@ -33,7 +33,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        tv_timeline = (TextView) findViewById(R.id.tv_timeline);
+        rv_timeline= (RecyclerView) findViewById(R.id.rv_timeline);
         btn_create = (Button) findViewById(R.id.btn_create);
         btn_refresh = (Button) findViewById(R.id.btn_refresh);
 
