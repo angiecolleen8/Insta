@@ -1,31 +1,23 @@
 package com.codepath.acfoley.insta;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.codepath.acfoley.insta.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static com.codepath.acfoley.insta.Constants.REQUEST_CODE_CAMERA;
@@ -50,7 +42,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private static final String imagepath = "somestring"; //TODO- you will end up changing this
-    private EditText et_description;
+    private TextView tv_timeline;
     private Button btn_create;
     private Button btn_refresh;
     private ImageView iv_newTempPic;
@@ -62,7 +54,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        et_description = (EditText) findViewById(R.id.et_description);
+        tv_timeline = (TextView) findViewById(R.id.tv_timeline);
         btn_create = (Button) findViewById(R.id.btn_create);
         btn_refresh = (Button) findViewById(R.id.btn_refresh);
         //TODO - once camera works, remove this image view and move this picture to the imageView in the OnCompose activity
@@ -73,12 +65,8 @@ public class HomeActivity extends AppCompatActivity {
             /**What happens when you click the 'create new post' button*/
             @Override
             public void onClick(View view) {
-
                 //first - we force user to take a picture
                 dispatchTakePictureIntent();
-
-//
-//
             }
         });
 
@@ -91,20 +79,13 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     /**
-     * take user to camera
+     * take user to camera - invoke intent
      */
-    //resolveActivity() checks that there is an activity that can handle this intent
-    /*private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, Constants.REQUEST_CODE_CAMERA);
-        }
-    }*/
 
-    /**take user to camera - invoke intent*/
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
+
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
             File photoFile = null;
@@ -122,17 +103,26 @@ public class HomeActivity extends AppCompatActivity {
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODE_CAMERA);
             }
-        }
+        } //this if block worked to display image on compose activity
     }
 
-    /**takes user back to home activity and makes post*/
+    /**
+     * takes user back to home activity and makes post
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
+        if (requestCode == REQUEST_CODE_CAMERA && resultCode == RESULT_OK) {        //Changed request code from Camera to Compose
+        //launch ComposeActivity - which is where the new picture will be displayed
+            Intent i = new Intent(this, ComposeActivity.class); //"I intend to go from this activity (timeline activity) to ComposeActivity
+            setResult(Constants.REQUEST_CODE_COMPOSE, i);
+            startActivityForResult(i, Constants.REQUEST_CODE_COMPOSE);
+
+
+            // Bundle extras = data.getExtras();
 //            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            iv_newTempPic.setImageBitmap(imageBitmap);
+//            Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath); //this line
+//            iv_newTempPic.setImageBitmap(imageBitmap);                           //and this line allowed me to see camera on home activity before I rewired
+
 
 //            final String descriptionInput = et_description.getText().toString();
 //                final ParseUser user = ParseUser.getCurrentUser();
@@ -160,6 +150,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     //TODO - use this later, after you know camera works
+
     /**
      * what to do after Camera gets the picture
      */
@@ -194,7 +185,7 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void createPost(String description, ParseFile image, ParseUser user) {
+   /* private void createPost(String description, ParseFile image, ParseUser user) {
         final Post newPost = new Post();
         newPost.setDescription(description);
         newPost.setUser(user);
@@ -209,24 +200,11 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/ //this worked for showing pic in home timeline
 
-    /**creates unique filepath for photo*/
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
 
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
+    //had createImageFile here when showing image on home worked
+
 }
 
 
