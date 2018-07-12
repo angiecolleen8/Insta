@@ -18,6 +18,11 @@ import static com.codepath.acfoley.insta.Constants.REQUEST_CODE_CAMERA;
 
 public class HomeActivity extends AppCompatActivity {
 
+    //next steps:
+    //create post item
+    //"inflate" post item with Parse /  adapter
+    //inflate recycler view with post items
+
     private TextView tv_timeline;
     private Button btn_create;
     private Button btn_refresh;
@@ -31,6 +36,8 @@ public class HomeActivity extends AppCompatActivity {
         tv_timeline = (TextView) findViewById(R.id.tv_timeline);
         btn_create = (Button) findViewById(R.id.btn_create);
         btn_refresh = (Button) findViewById(R.id.btn_refresh);
+
+        loadTopPosts();
 
         btn_create.setOnClickListener(new View.OnClickListener() {
 
@@ -50,8 +57,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-
-
     /*** takes user back to home activity and makes post*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -64,12 +69,6 @@ public class HomeActivity extends AppCompatActivity {
 
             Bundle extras = data.getExtras();
 //            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath); //this line
-//            iv_newTempPic.setImageBitmap(imageBitmap);                           //and this line allowed me to see camera on home activity before I rewired
-
-
-//            final String descriptionInput = et_description.getText().toString();
-//                final ParseUser user = ParseUser.getCurrentUser();
         }
     }
 
@@ -81,7 +80,6 @@ public class HomeActivity extends AppCompatActivity {
     private void loadTopPosts() {
         final Post.Query postsQuery = new Post.Query(); //"enclosing class" - what does that mean? I "fixed it" by making Query a static class. how does this work?
         postsQuery.getTop().withUser();
-
 
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
