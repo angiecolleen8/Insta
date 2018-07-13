@@ -20,7 +20,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordInput;
     private Button btnLogin;
     private Button btn_sign_up;
-    private Boolean setPass = true; //TODO - delete
 
 
     @Override
@@ -33,12 +32,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = (EditText) findViewById(R.id.et_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btn_sign_up = (Button) findViewById(R.id.btn_sign_up);
-
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO - take out if block!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (hacky login)
-        if (setPass) {
-            usernameInput.setText("asdf");
-            passwordInput.setText("1234");
-        }
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override

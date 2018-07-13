@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -38,15 +40,23 @@ public class SignupActivity extends AppCompatActivity {
                 // Set core properties for new user
                 user.setUsername(usernameInput.getText().toString());
                 user.setPassword(passwordInput.getText().toString());
+                user.setEmail(et_email.getText().toString());
 
-
-                Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
-                startActivity(intent);
-                finish(); //necessary?
+                user.signUpInBackground(new SignUpCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            // Hooray! Let them use the app now.
+                            Intent intent = new Intent(SignupActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish(); //necessary?
+                        } else {
+                            // Sign up didn't succeed. Look at the ParseException
+                            // to figure out what went wrong
+                        }
+                    }
+                });
             }
         });
-
-
-
     }
 }
