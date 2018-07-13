@@ -13,7 +13,6 @@ import com.codepath.acfoley.insta.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +45,15 @@ public class HomeActivity extends AppCompatActivity {
         //data source
         posts = new ArrayList<>();
 
-        loadTopPosts();
+
         //construct adapter from data source
         postAdapter = new PostAdapter(posts);
 
-        rv_timeline.setAdapter(postAdapter);
+
         rv_timeline.setLayoutManager(new LinearLayoutManager(this));
+        rv_timeline.setAdapter(postAdapter);
 
-
+        loadTopPosts();
         btn_create.setOnClickListener(new View.OnClickListener() {
 
             /**What happens when you click the 'create new post' button*/
@@ -91,21 +91,24 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void loadTopPosts() {
-        final ParseQuery<Post> parseQuery = ParseQuery.getQuery(Post.class);
+       // final ParseQuery<Post> parseQuery = ParseQuery.getQuery(Post.class);
         final Post.Query postsQuery = new Post.Query(); //"enclosing class" - what does that mean? I "fixed it" by making Query a static class. how does this work?
         postsQuery.getTop().withUser();
         Log.d("HomeActivity", "ENTERING LOAD TOP POST");
+        System.out.println("Coming here");
         postsQuery.findInBackground(new FindCallback<Post>() {
             @Override
-            public void done(List<Post> posts, ParseException e) {
+            public void done(List<Post> objects, ParseException e) {
                 if (e == null) {
-                    for (int i = 0; i < posts.size(); i++) {
-                        posts.add(0, posts.get(i));
+                    for (int i = 0; i < objects.size(); i++) {
+                        posts.add(0, objects.get(i));
                         postAdapter.notifyItemInserted(0);
-                        Log.d("HomeActivity", "Post[" + i + "] = " + posts.get(i).getDescription() + "\nusername = " + posts.get(i).getUser().getUsername()); //just to show
+                        Log.d("HomeActivity", "Post[" + i + "] = " + objects.get(i).getDescription() + "\nusername = " + objects.get(i).getUser().getUsername()); //just to show
                     }
                 } else {
                     e.printStackTrace();
+                    Log.d("HomeActivity", e.getMessage()); //just to show
+
                 }
             }
         });

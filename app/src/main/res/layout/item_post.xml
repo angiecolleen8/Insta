@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="5dp">
     <!-- android:background="@drawable/rounded_corners_background"> uncomment with rounded corners implementation -->
 
@@ -12,7 +12,7 @@
         android:layout_height="358dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        app:srcCompat="@android:color/black" />
+        android:src="@color/colorAccent" />
 
     <TextView
         android:id="@+id/tv_username"
@@ -29,15 +29,14 @@
         android:layout_height="71dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="32dp"
         android:text="TweetBody" />
 
     <TextView
         android:id="@+id/tv_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/tv_username"
         android:padding="7dp"
         android:text="TimeStamp" />
 

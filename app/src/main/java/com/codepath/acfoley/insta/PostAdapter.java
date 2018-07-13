@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.codepath.acfoley.insta.model.Post;
 import com.parse.ParseException;
 
@@ -86,9 +85,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             viewHolder.tv_description.setText(post.getDescription());
             //viewHolder.tv_timestamp.setText(post.getRelativeTimeAgo(tweet.createdAt));//TODO - come back to this when you add timestamp
 
-            //load images using Glide
-            Glide.with(context)
-                    .load(post.getImage().getUrl()).into(viewHolder.iv_image);
+//            load images using Glide
+//            Glide.with(context)
+//                    .load(post.getImage().getUrl())
+//                    .into(viewHolder.iv_image);
         } catch (ParseException e) {
             e.printStackTrace();
         }
