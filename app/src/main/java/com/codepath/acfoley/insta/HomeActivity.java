@@ -14,6 +14,7 @@ import com.codepath.acfoley.insta.model.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class HomeActivity extends AppCompatActivity {
     RecyclerView rv_timeline;
     private Button btn_create;
     private Button btn_refresh;
+    private Button btn_logout;
     ArrayList<Post> posts;
     PostAdapter postAdapter;
     SwipeRefreshLayout swipeContainer;
@@ -38,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
 
         rv_timeline = (RecyclerView) findViewById(R.id.rv_timeline);
         btn_create = (Button) findViewById(R.id.btn_create);
-        btn_refresh = (Button) findViewById(R.id.btn_refresh);
+        btn_logout = (Button) findViewById(R.id.btn_logout);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
         //data source
@@ -76,6 +78,21 @@ public class HomeActivity extends AppCompatActivity {
                 //refresh();
             }
         });
+
+        btn_logout.setOnClickListener(new View.OnClickListener() {
+
+            /**What happens when you click the 'logout' button*/
+            @Override
+            public void onClick(View view) {
+                //logout user
+                ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser(); // this will now be null
+                //take user back to login page
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
         // Configure the refreshing colors
         swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
                 android.R.color.holo_green_light,
