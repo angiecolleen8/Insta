@@ -1,7 +1,6 @@
 package com.codepath.acfoley.insta;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.acfoley.insta.model.Post;
+import com.parse.ParseException;
 
 import java.util.List;
 
@@ -46,10 +46,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         }
 
 
-
-        //TODO - revisit
+        //TODO - revisit when making details page
         //@Override
-        public void onClick(View view) {
+       /* public void onClick(View view) {
             //gets item position
             int position = getAdapterPosition();
             // make sure the position is valid, i.e. actually exists in the view
@@ -62,7 +61,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
                 // show the activity
                 context.startActivity(intent);
             }
-        }
+        }*/
     }
 
     //for each row, inflate the layout and cache the references into ViewHolder
@@ -71,7 +70,6 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         context = parent.getContext(); //Context is a request to the OS to do something
         LayoutInflater inflater = LayoutInflater.from(context);
-
         View postView = inflater.inflate(R.layout.item_post, parent, false); //look into this method
         ViewHolder viewHolder = new ViewHolder(postView);
         return viewHolder;
@@ -83,13 +81,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         Post post = mPosts.get(position);
 
         //populate the views according to this data
-        viewHolder.tv_username.setText(post.getUser().toString());
-        viewHolder.tv_description.setText(post.getDescription());
-        //viewHolder.tv_timestamp.setText(post.getRelativeTimeAgo(tweet.createdAt));//TODO - come back to this when you add timestamp
+        try {
+            viewHolder.tv_username.setText(post.getUser().fetchIfNeeded().getUsername());
+            viewHolder.tv_description.setText(post.getDescription());
+            //viewHolder.tv_timestamp.setText(post.getRelativeTimeAgo(tweet.createdAt));//TODO - come back to this when you add timestamp
 
-        //load images using Glide
-        Glide.with(context)
-                .load(post.getUser());
+            //load images using Glide
+            Glide.with(context)
+                    .load(post.getImage().getUrl()).into(viewHolder.iv_image);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
 
         /*
         int radius = 30; // corner radius, higher value = more rounded
