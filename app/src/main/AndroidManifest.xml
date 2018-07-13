@@ -40,7 +40,8 @@
         </activity>
         <activity android:name=".HomeActivity" />
         <activity android:name=".ComposeActivity" />
-        <activity android:name=".SignupActivity"></activity>
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".DetailsActivity"></activity>
     </application>
 
 </manifest> <!-- May need line for uses feature camera here -->

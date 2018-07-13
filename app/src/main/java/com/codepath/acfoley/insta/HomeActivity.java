@@ -38,7 +38,6 @@ public class HomeActivity extends AppCompatActivity {
         btn_create = (Button) findViewById(R.id.btn_create);
         btn_logout = (Button) findViewById(R.id.btn_logout);
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        //item_post = (View) findViewById(R.id.item_post);  //need for making entire post item a button
 
         //data source
         posts = new ArrayList<>();
@@ -60,12 +59,6 @@ public class HomeActivity extends AppCompatActivity {
                 dispatchToCompose();
             }
         });
-
-        /*item_post.setOnClickListener({
-                @Override
-        });*/
-
-
 
         // Setup refresh listener which triggers new data loading
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

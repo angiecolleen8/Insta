@@ -1,6 +1,8 @@
 package com.codepath.acfoley.insta;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,18 +11,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.acfoley.insta.model.GlideApp;
 import com.codepath.acfoley.insta.model.Post;
 import com.parse.ParseException;
 
 import java.util.List;
 
-public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     //pass in Tweets list in constructor
     private List<Post> mPosts;
     Context context;
 
-    public PostAdapter(List<Post> posts) { mPosts = posts; }
+    public PostAdapter(List<Post> posts) {
+        mPosts = posts;
+    }
 
     //create ViewHolder class
 
@@ -30,37 +37,40 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         public ImageView iv_image;
         public TextView tv_username;
         public TextView tv_description;
-       // public TextView tv_timestamp;
+        // public TextView tv_timestamp;
 
 
         //do item_post view by id lookups
         public ViewHolder(View itemView) {
-            super(itemView); //Why do we need to call the super-constructor?
+            super(itemView);
 
             //do the findbyid lookups
-            iv_image = (ImageView) itemView.findViewById(R.id.iv_new_pic); //not sure if finding picture like this will work
+            iv_image = (ImageView) itemView.findViewById(R.id.iv_image); //Glide null pointer starting here
             tv_username = (TextView) itemView.findViewById(R.id.tv_username);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
             //tv_timestamp = (TextView) itemView.findViewById(R.id.tv_timestamp);
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View view) {
+                    //gets item position
+                    int position = getAdapterPosition();
+                    // make sure the position is valid, i.e. actually exists in the view
+                    if (position != RecyclerView.NO_POSITION) {
+                        // get the post at the position
+                        Post post = mPosts.get(position);
+                        // create intent for new activity
+                        Intent intent = new Intent(context, DetailsActivity.class); //TODO - take a look at this intent
+                        intent.putExtra(Post.class.getSimpleName(), post);
+                        // show the activity
+                        context.startActivity(intent);
+                    }
+                }
+
+            });
         }
-
-
-        //TODO - revisit when making details page
-        //@Override
-       /* public void onClick(View view) {
-            //gets item position
-            int position = getAdapterPosition();
-            // make sure the position is valid, i.e. actually exists in the view
-            if (position != RecyclerView.NO_POSITION) {
-                // get the post at the position
-                Post post = mPosts.get(position);
-                // create intent for new activity
-                Intent intent = new Intent(context, ComposeActivity.class); //TODO - take a look at this intent
-                intent.putExtra(Post.class.getSimpleName(), post);
-                // show the activity
-                context.startActivity(intent);
-            }
-        }*/
     }
 
     //for each row, inflate the layout and cache the references into ViewHolder
@@ -74,6 +84,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
         return viewHolder;
     }
 
+    @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         //get data according to position so that we know which post to populate
@@ -85,23 +96,21 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder>{
             viewHolder.tv_description.setText(post.getDescription());
             //viewHolder.tv_timestamp.setText(post.getRelativeTimeAgo(tweet.createdAt));//TODO - come back to this when you add timestamp
 
-//            load images using Glide
-//            Glide.with(context)
-//                    .load(post.getImage().getUrl())
-//                    .into(viewHolder.iv_image);
+            //load images using Glide
+            GlideApp.with(context)
+                    .load(post.getImage().getUrl())
+                    .transform(new RoundedCornersTransformation(30, 10)).into(viewHolder.iv_image);
+
+
+            //load images using Glide with rounded corners
+            //int radius = 30; // corner radius, higher value = more rounded
+            //int margin = 10; // crop margin, set to 0 for corners with no crop
+            //changed from GlideApp to Glide
+                    //.transform(new RoundedCornersTransformation(radius, margin))
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
-        /*
-        int radius = 30; // corner radius, higher value = more rounded
-        int margin = 10; // crop margin, set to 0 for corners with no crop
-        //round corners on profile images
-        GlideApp.with(context) //changed from GlideApp to Glide
-                .load(post.getImage())
-                .transform(new RoundedCornersTransformation(radius, margin))//imageURL is profileImageURL
-                .into(viewHolder.iv_image);*/
     }
 
     @Override
