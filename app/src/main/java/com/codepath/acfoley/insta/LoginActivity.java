@@ -19,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameInput;
     private EditText passwordInput;
     private Button btnLogin;
+    private Button btn_sign_up;
     private Boolean setPass = true; //TODO - delete
 
 
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         usernameInput = (EditText) findViewById(R.id.et_username);
         passwordInput = (EditText) findViewById(R.id.et_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
+        btn_sign_up = (Button) findViewById(R.id.btn_sign_up);
 
         //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!TODO - take out if block!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! (hacky login)
         if (setPass) {
@@ -44,6 +46,15 @@ public class LoginActivity extends AppCompatActivity {
                 final String username = usernameInput.getText().toString();
                 final String password = passwordInput.getText().toString();
                 login(username, password);
+            }
+        });
+
+        btn_sign_up.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                startActivity(intent);
+                finish(); //necessary?
             }
         });
     }

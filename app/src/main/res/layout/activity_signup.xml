@@ -34,23 +34,27 @@
         android:hint="Password"
         android:inputType="textPassword" />
 
-    <Button
-        android:id="@+id/btn_login"
+    <EditText
+        android:id="@+id/et_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="164dp"
-        android:text="Log In"
-        android:textColor="@android:color/white" />
+
+        android:layout_alignEnd="@+id/et_username"
+        android:layout_alignStart="@+id/et_username"
+        android:layout_below="@+id/et_password"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:hint="email"
+        android:inputType="textPassword" />
+
 
     <Button
-        android:id="@+id/btn_sign_up"
+        android:id="@+id/btn_finish_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/btn_login"
-        android:layout_marginStart="97dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignStart="@+id/et_username"
+        android:layout_marginTop="177dp"
         android:text="SIGN UP" />
 
 
