@@ -24,7 +24,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //todo wire buttons
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
@@ -32,24 +31,33 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = (EditText) findViewById(R.id.et_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btn_sign_up = (Button) findViewById(R.id.btn_sign_up);
+        ParseUser user = ParseUser.getCurrentUser();
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final String username = usernameInput.getText().toString();
-                final String password = passwordInput.getText().toString();
-                login(username, password);
-            }
-        });
+        if (user == null) {
 
-        btn_sign_up.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
-                startActivity(intent);
-                finish(); //necessary?
-            }
-        });
+            btnLogin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final String username = usernameInput.getText().toString();
+                    final String password = passwordInput.getText().toString();
+                    login(username, password);
+                }
+            });
+
+            btn_sign_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+                    startActivity(intent);
+                    finish(); //necessary?
+                }
+            });
+        } else {
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
+            Log.d("Login activity", "Login for cached user successful.");
+        }
     }
 
     public void login(String username, String password) {
@@ -57,13 +65,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e == null) {
-                    Log.d("Login activity", "Login successful.");
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
-                    finish(); //don't let user log out by just pressing back button
+                    finish();
+                    Log.d("Login activity", "Login successful.");
+
+                    //don't let user log out by just pressing back button
                 } else {
-                    Log.e("Login activity", "Login failed.");
-                    e.printStackTrace();
+                    Log.d("Login activity", "Login failed.");
                 }
             }
         });
