@@ -48,7 +48,7 @@ public class Post extends ParseObject {
         }
 
         public Query getTop() { //get top posts
-            setLimit(20); //gets top 20 posts
+            setLimit(100); //gets top 20 posts
             return this;
         }
 

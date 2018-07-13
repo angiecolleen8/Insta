@@ -21,6 +21,8 @@ import java.util.List;
 import static com.codepath.acfoley.insta.Constants.REQUEST_CODE_CAMERA;
 
 public class HomeActivity extends AppCompatActivity {
+    
+    //START with refresh
 
     RecyclerView rv_timeline;
     private Button btn_create;

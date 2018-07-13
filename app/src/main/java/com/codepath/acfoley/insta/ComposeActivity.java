@@ -71,7 +71,8 @@ public class ComposeActivity extends AppCompatActivity {
                 //take you back to timeline with new post at top
                 Intent data = new Intent(ComposeActivity.this, HomeActivity.class);
                 setResult(Constants.REQUEST_CODE_TIMELINE, data);  //had dispatchIntentforHome(Constants.REQUEST_CODE_COMPOSE, RESULT_OK, data)
-                startActivityForResult(data, Constants.REQUEST_CODE_TIMELINE);
+                finish();
+                //startActivityForResult(data, Constants.REQUEST_CODE_TIMELINE);
             }
         });
     }
