@@ -127,7 +127,7 @@ public class ComposeActivity extends AppCompatActivity {
         newPost.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                if (e == null) {
+                    if (e == null) {
                     Log.d("ComposeActivity", "Post created successfully!");
                     Toast.makeText(getApplicationContext(), "Post created successfully!", Toast.LENGTH_LONG).show();
                 } else {
