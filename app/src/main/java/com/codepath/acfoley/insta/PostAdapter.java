@@ -15,6 +15,8 @@ import com.codepath.acfoley.insta.model.GlideApp;
 import com.codepath.acfoley.insta.model.Post;
 import com.parse.ParseException;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -37,7 +39,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public ImageView iv_image;
         public TextView tv_username;
         public TextView tv_description;
-        // public TextView tv_timestamp;
+        public TextView tv_timestamp;
 
 
         //do item_post view by id lookups
@@ -46,9 +48,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             //do the findbyid lookups
             iv_image = (ImageView) itemView.findViewById(R.id.iv_image); //Glide null pointer starting here
-            tv_username = (TextView) itemView.findViewById(R.id.tv_username);
+            tv_username = (TextView) itemView.findViewById(R.id.tv_username_detail);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
-            //tv_timestamp = (TextView) itemView.findViewById(R.id.tv_timestamp);
+            tv_timestamp = (TextView) itemView.findViewById(R.id.tv_timestamp);
 
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +65,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
                         Post post = mPosts.get(position);
                         // create intent for new activity
                         Intent intent = new Intent(context, DetailsActivity.class); //TODO - take a look at this intent
-                        intent.putExtra(Post.class.getSimpleName(), post);
+                        intent.putExtra("user", Parcels.wrap(post));
                         // show the activity
                         context.startActivity(intent);
                     }
@@ -89,24 +91,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         //get data according to position so that we know which post to populate
         Post post = mPosts.get(position);
+        Post.Query postQuery = new Post.Query();
 
         //populate the views according to this data
         try {
             viewHolder.tv_username.setText(post.getUser().fetchIfNeeded().getUsername());
             viewHolder.tv_description.setText(post.getDescription());
-            //viewHolder.tv_timestamp.setText(post.getRelativeTimeAgo(tweet.createdAt));//TODO - come back to this when you add timestamp
+            viewHolder.tv_timestamp.setText(post.getCreatedAt().toString());//TODO - come back to this when you add timestamp
 
             //load images using Glide
             GlideApp.with(context)
                     .load(post.getImage().getUrl())
                     .transform(new RoundedCornersTransformation(30, 10)).into(viewHolder.iv_image);
-
-
-            //load images using Glide with rounded corners
-            //int radius = 30; // corner radius, higher value = more rounded
-            //int margin = 10; // crop margin, set to 0 for corners with no crop
-            //changed from GlideApp to Glide
-                    //.transform(new RoundedCornersTransformation(radius, margin))
 
         } catch (ParseException e) {
             e.printStackTrace();

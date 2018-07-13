@@ -15,11 +15,12 @@
         android:src="@color/colorAccent" />
 
     <TextView
-        android:id="@+id/tv_username"
+        android:id="@+id/tv_username_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/tv_description"
-        android:layout_alignParentStart="true"
+        android:layout_alignParentStart
+            ="true"
         android:padding="7dp"
         android:text="UserName" />
 
@@ -36,7 +37,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@+id/tv_username"
+        android:layout_alignTop="@+id/tv_username_detail"
         android:padding="7dp"
         android:text="TimeStamp" />
 
