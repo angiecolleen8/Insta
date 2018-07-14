@@ -48,7 +48,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             //do the findbyid lookups
             iv_image = (ImageView) itemView.findViewById(R.id.iv_image); //Glide null pointer starting here
-            tv_username = (TextView) itemView.findViewById(R.id.tv_username_detail);
+            tv_username = (TextView) itemView.findViewById(R.id.tv_username);
             tv_description = (TextView) itemView.findViewById(R.id.tv_description);
             tv_timestamp = (TextView) itemView.findViewById(R.id.tv_timestamp);
 

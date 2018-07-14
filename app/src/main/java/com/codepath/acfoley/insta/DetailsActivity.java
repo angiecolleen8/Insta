@@ -29,7 +29,7 @@ public class DetailsActivity extends AppCompatActivity {
         parseUser = ParseUser.getCurrentUser();
         post = Parcels.unwrap(getIntent().getParcelableExtra("user"));
 
-        tv_username_detail = (TextView) findViewById(R.id.tv_username_detail);
+        tv_username_detail = (TextView) findViewById(R.id.tv_username);
         tv_description_detail = (TextView) findViewById(R.id.tv_description_detail);
         tv_timestamp_detail = (TextView) findViewById(R.id.tv_timestamp_detail);
         iv_image_detail = (ImageView) findViewById(R.id.iv_image_detail);
