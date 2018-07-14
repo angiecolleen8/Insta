@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">Insta</string>
-
-
+    <string name="forgot">Forgot your login details? Get help signing in. </string>
 </resources>

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -18,6 +19,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameInput;
     private EditText passwordInput;
+    private TextView tv_forgot;
     private Button btnLogin;
     private Button btn_sign_up;
 
@@ -31,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         passwordInput = (EditText) findViewById(R.id.et_password);
         btnLogin = (Button) findViewById(R.id.btn_login);
         btn_sign_up = (Button) findViewById(R.id.btn_sign_up);
+        tv_forgot = (TextView) findViewById(R.id.tv_forgot);
         ParseUser user = ParseUser.getCurrentUser();
 
         if (user == null) {

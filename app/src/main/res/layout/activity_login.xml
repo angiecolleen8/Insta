@@ -45,16 +45,49 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="182dp"
+        android:background="@drawable/my_button_bg"
+
         android:text="Log In"
         android:textColor="@android:color/white" />
+
 
     <Button
         android:id="@+id/btn_sign_up"
         android:layout_width="202dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="81dp"
+        android:background="@drawable/my_button_bg"
+        android:text="SIGN UP" />
+
+    <TextView
+        android:id="@+id/tv_forgot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/btn_login"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-182dp"
-        android:text="SIGN UP" />
+        android:text="Forgot your login details? Get help signing in."
+        android:textColor="@color/colorPrimary" />
+
+    <ImageView
+        android:id="@+id/iv_fb"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/tv_fbsignup"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="105dp"
+        app:srcCompat="@drawable/facebook" />
+
+    <TextView
+        android:id="@+id/tv_fbsignup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="31dp"
+        android:layout_marginStart="151dp"
+        android:text="Sign up with Facebook." />
 
 </RelativeLayout>
